@@ -26,6 +26,9 @@ RUN docker-php-ext-install -j$(nproc) \
     intl \
     opcache
 
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
 # ---- install core extensions required by IPB 4.7 ----
 RUN echo "memory_limit=256M" > /usr/local/etc/php/conf.d/memory.ini \
   && echo "upload_max_filesize=100M" > /usr/local/etc/php/conf.d/uploads.ini \
