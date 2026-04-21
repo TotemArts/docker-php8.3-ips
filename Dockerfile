@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
+    $PHPIZE_DEPS \
     && rm -rf /var/lib/apt/lists/*
 
 # ---- configure GD properly (IPB uses image handling) ----
@@ -24,7 +25,8 @@ RUN docker-php-ext-install -j$(nproc) \
     gd \
     zip \
     intl \
-    opcache
+    opcache \
+    exif
 
 RUN pecl install redis \
     && docker-php-ext-enable redis
