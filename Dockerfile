@@ -47,9 +47,9 @@ RUN pecl install xdebug \
 RUN echo "memory_limit=256M" >> /usr/local/etc/php/conf.d/custom.ini \
   && echo "upload_max_filesize=100M" >> /usr/local/etc/php/conf.d/custom.ini \
   && echo "post_max_size=100M" >> /usr/local/etc/php/conf.d/custom.ini \
-  && echo "max_execution_time=120" >> /usr/local/etc/php/conf.d/custom.ini \
+  && echo "max_execution_time=300" >> /usr/local/etc/php/conf.d/custom.ini \
   && echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/custom.ini \
-  && printf "\n[www]\nrequest_terminate_timeout = 120\n" >> /usr/local/etc/php-fpm.d/zz-timeouts.conf
+  && printf "\n[www]\nrequest_terminate_timeout = 300\n" >> /usr/local/etc/php-fpm.d/zz-timeouts.conf
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]
