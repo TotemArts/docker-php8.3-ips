@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-if [[ -n "$ENABLE_XDEBUG" ]]; then
+if [ -n "$ENABLE_XDEBUG" ]; then
   cat > /usr/local/etc/php/conf.d/xdebug.ini <<EOF
 xdebug.mode=debug
 xdebug.client_host=${XDEBUG_CLIENT:-host.docker.internal}
@@ -10,4 +10,4 @@ else
   rm -f /usr/local/etc/php/conf.d/xdebug.ini
 fi
 
-exec php-fpm
+exec "$@"
