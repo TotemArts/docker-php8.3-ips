@@ -38,9 +38,10 @@ RUN docker-php-ext-install -j$(nproc) \
 RUN pecl install redis \
     && docker-php-ext-enable redis
 
-# install xdebug but leave it off by default
+# install xdebug but leave it off by default (configured in entrypoint)
 RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
+    && docker-php-ext-enable xdebug \
+    && docker-php-source delete
 
 # ---- install core extensions required by IPB 4.7 ----
 RUN echo "memory_limit=256M" > /usr/local/etc/php/conf.d/memory.ini \
