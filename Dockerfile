@@ -49,3 +49,4 @@ RUN echo "memory_limit=256M" > /usr/local/etc/php/conf.d/memory.ini \
   && echo "opcache.enable=1" > /usr/local/etc/php/conf.d/opcache.ini
 
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["php-fpm"]
