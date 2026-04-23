@@ -1,5 +1,7 @@
 FROM php:8.3-fpm
 
+COPY --chmod=0755 entrypoint.sh /entrypoint.sh
+
 # ---- system deps (required for compiling PHP extensions) ----
 RUN apt-get update && apt-get install -y \
     libpng-dev \
@@ -38,11 +40,12 @@ RUN pecl install redis \
 
 # install xdebug but leave it off by default
 RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug \
-    && echo "xdebug.mode=off" > /usr/local/etc/php/conf.d/xdebug.ini
+    && docker-php-ext-enable xdebug
 
 # ---- install core extensions required by IPB 4.7 ----
 RUN echo "memory_limit=256M" > /usr/local/etc/php/conf.d/memory.ini \
   && echo "upload_max_filesize=100M" > /usr/local/etc/php/conf.d/uploads.ini \
   && echo "post_max_size=100M" >> /usr/local/etc/php/conf.d/uploads.ini \
   && echo "opcache.enable=1" > /usr/local/etc/php/conf.d/opcache.ini
+
+ENTRYPOINT ["/entrypoint.sh"]
