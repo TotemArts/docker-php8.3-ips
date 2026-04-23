@@ -7,7 +7,8 @@ xdebug.client_host=${XDEBUG_CLIENT:-host.docker.internal}
 xdebug.start_with_request=yes
 EOF
 else
-  rm -f /usr/local/etc/php/conf.d/xdebug.ini
+  echo "; xdebug disabled" > /usr/local/etc/php/conf.d/xdebug.ini
+  echo "xdebug.mode=off" >> /usr/local/etc/php/conf.d/xdebug.ini
 fi
 
 exec "$@"
