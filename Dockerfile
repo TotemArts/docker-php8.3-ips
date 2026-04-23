@@ -1,5 +1,7 @@
 FROM php:8.3-fpm
 
+COPY --chmod=0755 entrypoint.sh /entrypoint.sh
+
 # ---- system deps (required for compiling PHP extensions) ----
 RUN apt-get update && apt-get install -y \
     libpng-dev \
@@ -11,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libgmp-dev \
+    libpq-dev \
     $PHPIZE_DEPS \
     && rm -rf /var/lib/apt/lists/*
 
@@ -23,6 +26,8 @@ RUN docker-php-ext-configure gd \
 RUN docker-php-ext-install -j$(nproc) \
     mysqli \
     pdo_mysql \
+    pdo_pgsql \
+    pgsql \
     gd \
     zip \
     intl \
@@ -33,8 +38,16 @@ RUN docker-php-ext-install -j$(nproc) \
 RUN pecl install redis \
     && docker-php-ext-enable redis
 
+# install xdebug but leave it off by default (configured in entrypoint)
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && docker-php-source delete
+
 # ---- install core extensions required by IPB 4.7 ----
 RUN echo "memory_limit=256M" > /usr/local/etc/php/conf.d/memory.ini \
   && echo "upload_max_filesize=100M" > /usr/local/etc/php/conf.d/uploads.ini \
   && echo "post_max_size=100M" >> /usr/local/etc/php/conf.d/uploads.ini \
   && echo "opcache.enable=1" > /usr/local/etc/php/conf.d/opcache.ini
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["php-fpm"]
