@@ -44,10 +44,12 @@ RUN pecl install xdebug \
     && docker-php-source delete
 
 # ---- install core extensions required by IPB 4.7 ----
-RUN echo "memory_limit=256M" > /usr/local/etc/php/conf.d/memory.ini \
-  && echo "upload_max_filesize=100M" > /usr/local/etc/php/conf.d/uploads.ini \
-  && echo "post_max_size=100M" >> /usr/local/etc/php/conf.d/uploads.ini \
-  && echo "opcache.enable=1" > /usr/local/etc/php/conf.d/opcache.ini
+RUN echo "memory_limit=256M" >> /usr/local/etc/php/conf.d/custom.ini \
+  && echo "upload_max_filesize=100M" >> /usr/local/etc/php/conf.d/custom.ini \
+  && echo "post_max_size=100M" >> /usr/local/etc/php/conf.d/custom.ini \
+  && echo "max_execution_time=120" >> /usr/local/etc/php/conf.d/custom.ini \
+  && echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/custom.ini \
+  && printf "\n[www]\nrequest_terminate_timeout = 120\n" >> /usr/local/etc/php-fpm.d/zz-timeouts.conf
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]
