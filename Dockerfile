@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libgmp-dev \
+    libpq-dev \
     $PHPIZE_DEPS \
     && rm -rf /var/lib/apt/lists/*
 
@@ -23,6 +24,8 @@ RUN docker-php-ext-configure gd \
 RUN docker-php-ext-install -j$(nproc) \
     mysqli \
     pdo_mysql \
+    pdo_pgsql \
+    pgsql \
     gd \
     zip \
     intl \
@@ -32,6 +35,11 @@ RUN docker-php-ext-install -j$(nproc) \
 
 RUN pecl install redis \
     && docker-php-ext-enable redis
+
+# install xdebug but leave it off by default
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && echo "xdebug.mode=off" > /usr/local/etc/php/conf.d/xdebug.ini
 
 # ---- install core extensions required by IPB 4.7 ----
 RUN echo "memory_limit=256M" > /usr/local/etc/php/conf.d/memory.ini \
