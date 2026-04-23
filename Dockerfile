@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.2-fpm
 
 COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 
